@@ -1,0 +1,108 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package nac;
+
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.GridLayout;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import javax.swing.JButton;
+import javax.swing.JFileChooser;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+
+public class Window extends JFrame implements ActionListener {
+    
+    
+    private ArchiveCSV csv;
+    private String[] separado;
+    private JPanel pForm;
+    private JPanel pButtons;
+    private JLabel lbNome;
+    private JLabel lbPreco;
+    private JTextField txtNome;
+    private JTextField txtPreco;
+    private JButton btnArchive;
+    private JButton btnAvancar;
+    public void actionPerformed(ActionEvent event) {
+        
+        if (event.getSource()== btnArchive){
+            openArchive();
+        }
+        if(event.getSource() == btnAvancar){
+            avancaRegistro();
+        }   
+}
+    public Window(){
+        super("Testando FlowLayout");
+        
+        setLayout(new BorderLayout());
+        
+        pForm = new JPanel();
+        pForm.setLayout(new GridLayout(2,2));
+        
+        lbNome = new JLabel();
+        lbNome.setText("Nome: ");
+        pForm.add(lbNome);
+        
+        txtNome = new JTextField(10);
+        pForm.add(txtNome);
+        
+        lbPreco = new JLabel();
+        lbPreco.setText("Preço: ");
+        pForm.add(lbPreco);
+        
+        txtPreco = new JTextField(5);
+        pForm.add(txtPreco);
+        
+        pButtons = new JPanel();
+        pButtons.setLayout(new FlowLayout());
+        
+        btnArchive = new JButton();
+        btnArchive.setText("Abrir Arquivo");
+        
+        btnAvancar = new JButton();
+        btnAvancar.setText("Próximo");
+        
+        add(btnAvancar, BorderLayout.EAST);
+        add(btnArchive, BorderLayout.SOUTH);
+        add(pForm, BorderLayout.CENTER);
+        //add(pButtons, BorderLayout.NORTH);
+       
+        btnArchive.addActionListener(this);
+        btnAvancar.addActionListener(this);
+    }
+
+    private void openArchive() {
+        JFileChooser saveFile = new JFileChooser();
+        saveFile.showOpenDialog(null);
+        csv = new ArchiveCSV(saveFile.getSelectedFile().getAbsolutePath());
+        csv.openCSV();
+        
+        separado = csv.separarLinha(csv.lerLinha());
+        txtNome.setText(separado[0]);
+        txtPreco.setText(separado[1]);
+        
+    }
+
+    private void avancaRegistro() {
+        try {
+        separado = csv.separarLinha(csv.lerLinha());
+        txtNome.setText(separado[0]);
+        txtPreco.setText(separado[1]);
+        } catch (Exception e) {
+        txtNome.setText("");
+        txtPreco.setText("");
+        }
+        
+    }
+            
+    
+}

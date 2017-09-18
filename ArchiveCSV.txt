@@ -1,0 +1,53 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package nac;
+
+import java.io.BufferedReader;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+
+/**
+ *
+ * @author Fabio
+ */
+public class ArchiveCSV {
+    private String caminho;
+    private FileInputStream archive;
+    private BufferedReader linha;
+    private String completo;
+    
+    public ArchiveCSV(){
+        
+    }
+    public ArchiveCSV(String caminho){
+      this.caminho = caminho; 
+    }
+    public void openCSV(){
+        try {
+            archive = new FileInputStream(this.caminho);
+            linha = new BufferedReader(new InputStreamReader(archive));
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        
+    }
+    public String lerLinha(){
+        try {
+            return linha.readLine();
+        } catch (IOException ex) {
+           return ex.getMessage();
+        }
+    }
+    public String[] separarLinha(String linhaLida){
+        return linhaLida.split("[;]");
+    }
+    
+}
